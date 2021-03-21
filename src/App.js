@@ -1,25 +1,57 @@
 import React from "react";
-import PropTypes from 'prop-types';
-
+import "./App.css";
+import axios from "axios";
+import Movie from "./Movie";
 class App extends React.Component{ 
   state = {
-    isLoading : true
+    isLoading : true,
+    movies : []
   };
-  componentDidMount(){
-    setTimeout(() => {
-      this.setState({isLoading : false});
-    },4000);
+  getMovies = async () => { //await this func, and finished axios continue..
+    const { data : 
+              { data : 
+                { movies }
+              }
+          } = await axios.get("https://yts-proxy.nomadcoders1.now.sh/list_movies.json?sort_by=rating");
+    console.log(movies);
+    this.setState({ movies : movies, isLoading : false });
+  }
+  componentDidMount(){ // fetch data
+    this.getMovies();
   }
   // react automatically execute render method
   render(){
     console.log("i am rendering");
-    const {isLoading} = this.state;
+    const {isLoading, movies} = this.state;
     return (
-      <div>
-        {isLoading ? "Loading..." : "We are ready"}
-    </div>
+      <section className = "container">
+        {isLoading 
+            ? <div className = "loader">
+                <span className = "loader__text">Loading...</span>
+              </div>
+            : (
+              <div className = "movies">
+               {movies.map(movie => // sending fetched data to Movie component
+                (<Movie 
+                    key = {movie.id}
+                    id = {movie.id}
+                    year = {movie.year}
+                    title = {movie.title}
+                    summary = {movie.summary}
+                    poster = {movie.medium_cover_image}
+                    genres = {movie.genres}
+                  />
+                )
+              )}
+            </div>
+            )}
+    </section>
     );
   }
 }
 
 export default App;
+
+
+
+
