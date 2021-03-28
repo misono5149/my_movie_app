@@ -1,11 +1,50 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "./Movie.css";
+import { Link } from "react-router-dom";
+
 // if the component doesn't have state
 // you create component, Function component
 
 function Movie({id, year, title, summary, poster, genres}){
-    return (<div className = "movie">
+  //link(page moves) to another pages with Movie component's props
+  /*
+  EXAMPLE LINK TO
+  history: {length: 26, action: "PUSH", location: {…}, createHref: ƒ, push: ƒ, …}
+location:
+hash: ""
+pathname: "/movie-detail"
+search: ""
+state:
+genres: ["Comedy"]
+poster: "https://yts.mx/assets/images/movies/deported_2020/medium-cover.jpg"
+summary: "When his new girlfriend gets deported on a technicality, Ross hires a fake husband to get her back into the country because he's not ready to commit to marriage."
+title: "Deported"
+year: 2021
+__proto__: Object
+__proto__: Object
+match:
+isExact: true
+params: {}
+path: "/movie-detail"
+url: "/movie-detail"
+__proto__: Object
+staticContext: undefined
+
+  */
+    return (
+    <Link to={{
+      pathname : `/movie/${id}`,
+      state : {
+        year : year,
+        title : title,
+        summary : summary,
+        poster : poster,
+        genres : genres
+      }
+    }}
+    >
+    <div className = "movie">
         <img src = {poster} alt={title} title = {title}/>
         <div className = "movie__data">
             <h3 className = "movie__title">{title}</h3>
@@ -22,6 +61,7 @@ function Movie({id, year, title, summary, poster, genres}){
             <p className = "movie__summary">{summary.slice(0,100)}...</p>
         </div>
     </div>
+    </Link>
     );
 }
 
